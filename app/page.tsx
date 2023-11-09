@@ -1,95 +1,77 @@
-import Image from 'next/image'
+'use client';
+import { useState } from 'react';
 import styles from './page.module.css'
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+const Home = () => {
+  const [formData, setFormData] = useState({
+    dni: '',
+    name: '',
+    apellidos: '',
+    email: '',
+    concentimiento: false,
+  });
+
+  const handleInputChange = (event: any) => {
+    const { id, value, type, checked } = event.target;
+    setFormData({
+      ...formData,
+      [id]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    localStorage.setItem('form',JSON.stringify(formData));
+  };
+
+  return <>
+    <div className={styles.container}>
+      <h1>Formulario de inscripcion</h1>
+      <form onSubmit={handleSubmit} className={styles.formContainer}>
+        <div className={styles.inputContainer}>
+          <label htmlFor="dni">Documento de identidad</label>
+          <input type="text" required id='dni'
+            value={formData.dni}
+            onChange={handleInputChange} 
+            className={styles.input}/>
         </div>
-      </div>
+        <div className={styles.inputContainer}>
+          <label htmlFor="name">Nombres</label>
+          <input type="text" required id='name'
+            value={formData.name}
+            onChange={handleInputChange} 
+            className={styles.input}/>
+        </div>
+        <div className={styles.inputContainer}>
+          <label htmlFor="apellidos">Apellidos</label>
+          <input type="text" required id='apellidos'
+            value={formData.apellidos}
+            onChange={handleInputChange} 
+            className={styles.input}/>
+        </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <div className={styles.inputContainer}>
+          <label htmlFor="email">email</label>
+          <input type="email" required id='email'
+            value={formData.email}
+            onChange={handleInputChange} 
+            className={styles.input}/>
+        </div>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+        <div className={styles.checkerContainer}>
+          <label htmlFor="concentimiento">Concentimiento de recoleccion de datos</label>
+          <input type="checkbox" required id='concentimiento'
+            checked={formData.concentimiento}
+            onChange={handleInputChange} />
+        </div>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+        <div >
+          <button type="submit" className={styles.button}>Guardar</button>
+        </div>
+      </form>
+    </div>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+  </>
 }
+
+export default Home;
