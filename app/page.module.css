@@ -281,3 +281,7 @@
   color: black;
   border-radius: 6px;
 }
+
+.button:disabled {
+  background-color: gray;
+}

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css'
 
 const Home = () => {
@@ -10,6 +10,7 @@ const Home = () => {
     email: '',
     concentimiento: false,
   });
+  const [disableButton, setDisableButton] = useState(true);
 
   const handleInputChange = (event: any) => {
     const { id, value, type, checked } = event.target;
@@ -19,10 +20,31 @@ const Home = () => {
     });
   };
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = (event: any) => {
+    
     event.preventDefault();
+
+    
     localStorage.setItem('form',JSON.stringify(formData));
   };
+
+  useEffect(() => {
+    if (
+      formData.dni.trim() === '' ||
+      formData.name.trim() === '' ||
+      formData.apellidos.trim() === '' ||
+      !validateEmail(formData.email)
+    ) {
+      setDisableButton(true);
+      return;
+    }
+    setDisableButton(false);
+  }, [formData]);
 
   return <>
     <div className={styles.container}>
@@ -66,7 +88,7 @@ const Home = () => {
         </div>
 
         <div >
-          <button type="submit" className={styles.button}>Guardar</button>
+          <button type="submit" className={styles.button} disabled={disableButton}>Guardar</button>
         </div>
       </form>
     </div>
